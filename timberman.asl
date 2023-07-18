@@ -6,7 +6,7 @@ state("Timberman") {
 }
 
 startup {
-	refreshRate = 60;
+	vars.scores = new[] { 100, 250, 500, 750, 1000, 1500, 2000 };
 
 	//Splits
 	settings.Add("score100", true, "100");
@@ -16,35 +16,19 @@ startup {
 	settings.Add("score1000", true, "1000");
 	settings.Add("score1500", true, "1500");
 	settings.Add("score2000", true, "2000");
-	
-	vars.start = false;
-	vars.split = false;
-	vars.end = false;
-}
-
-update {
-	//Time starts when the score counter changes to 1
-	vars.start = (old.score == 0 && current.score > 0);
-	//Time splits/ends when the score counter reaches a selected goal
-	vars.split = ((old.score < 100 && current.score >= 100 && settings["score100"]) || (old.score < 250 && current.score >= 250 && settings["score250"]) || (old.score < 500 && current.score >= 500 && settings["score500"]) || (old.score < 750 && current.score >= 750 && settings["score750"]) || (old.score < 1000 && current.score >= 1000 && settings["score1000"]) || (old.score < 1500 && current.score >= 1500 && settings["score1500"]) || (old.score < 2000 && current.score >= 2000 && settings["score2000"]));
-	//Time resets when the score counter resets
-	vars.end = (old.score != 0 && current.score == 0);
 }
 
 start {
-	return vars.start;
+	return old.score == 0 && current.score > 0;
 }
 
 split {
-	return vars.split;
+	foreach (int targetScore in vars.scores) {
+		if (old.score < targetScore && current.score >= targetScore && settings["score" + targetScore])
+			return true;
+	}
 }
 
 reset {
-	if (vars.end) {
-		vars.start = false;
-		vars.split = false;
-		vars.end = false;
-		return true;
-	}
-	return false;
+	return old.score != 0 && current.score == 0;
 }
