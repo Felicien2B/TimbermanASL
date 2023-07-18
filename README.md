@@ -6,3 +6,8 @@ Auto Splitter for Timberman (PC)
 - Resets when the score is 0
 
 Tested on Timberman v2.10.
+
+## Links
+- [Speedrun.com Timberman](https://www.speedrun.com/timberman)
+- [LiveSplit](https://livesplit.org/)
+- [Timberman Steam page](https://store.steampowered.com/app/398710/Timberman/)
